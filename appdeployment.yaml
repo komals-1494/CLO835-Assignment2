@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: employeedeployment
+  labels:
+    app: employee
+spec:
+  selector:
+    matchLabels:
+        app: employee
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: employee
+    spec:
+      containers:
+      - name: employee
+        image: 402242685480.dkr.ecr.us-east-1.amazonaws.com/app:v.01
+        env:
+        - name: DBHOST
+          value: mysqlservice.sql.svc.cluster.local 
+        - name: DBUSER
+          value: root
+        - name: DBPWD
+          value: pw
+        - name: DATABASE
+          value: employee 
+        - name: DBPORT
+          value: "3306"
+        - name: APP_COLOR
+          value: pink
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+      imagePullSecrets:
+        - name: secret-registry
